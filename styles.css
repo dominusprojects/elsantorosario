@@ -1,0 +1,28 @@
+body{
+  padding: 25px;
+}
+.title {
+	color: #5C6AC4;
+	/* Estilos para los botones de las sub-oraciones */
+.sub-oracion-btn {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 15px;
+    background-color: #5d5d5d;
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.sub-oracion-btn:hover {
+    background-color: #4a4a4a;
+}
+
+
+}
