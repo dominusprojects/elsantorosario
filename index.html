@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Santo Rosario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .text-brown-700 {
+            color: #5d4037;
+        }
+        .bg-brown-600 {
+            background-color: #795548;
+        }
+        .bg-brown-600:hover {
+            background-color: #6d4c41;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <main id="app" class="w-full max-w-2xl bg-white p-8 rounded-xl shadow-lg">
+
+        <section id="welcome-screen" class="flex flex-col items-center text-center">
+            <h1 class="text-4xl font-bold mb-4 text-brown-700">El Santo Rosario</h1>
+            <p class="text-lg italic mb-6">
+                "Ojalá sepas y quieras tú sembrar en todo el mundo la paz y la alegría, con esta admirable devoción mariana."
+            </p>
+            <p class="text-sm font-bold mb-8">- San Josemaría Escrivá de Balaguer</p>
+            <div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+                <button id="start-btn" class="px-6 py-3 bg-brown-600 text-white rounded-lg shadow-md hover:bg-brown-700 transition duration-300">
+                    Comenzar a Rezar
+                </button>
+                <button id="other-prayers-btn" class="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg shadow-md hover:bg-gray-300 transition duration-300">
+                    Otras Oraciones
+                </button>
+                <button id="promises-btn" class="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg shadow-md hover:bg-gray-300 transition duration-300">
+                    Promesas del Santo Rosario
+                </button>
+            </div>
+        </section>
+
+        <section id="rosary-container" class="hidden flex flex-col items-center text-center">
+            <h2 id="section-title" class="text-3xl font-bold mb-4 text-brown-700"></h2>
+            <div id="content-display" class="text-left w-full"></div>
+            
+            <div id="counter-display" class="my-4 text-xl font-semibold hidden">
+                <span id="prayer-type"></span>: <span id="prayer-count"></span>
+            </div>
+
+            <div class="flex gap-4 mt-8 w-full justify-center">
+                <button id="prev-btn" class="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg shadow-md hover:bg-gray-300 transition duration-300 hidden">
+                    Anterior
+                </button>
+                <button id="next-btn" class="px-6 py-3 bg-brown-600 text-white rounded-lg shadow-md hover:bg-brown-700 transition duration-300">
+                    Siguiente
+                </button>
+            </div>
+        </section>
+        
+        <section id="other-prayers-container" class="hidden">
+            <h2 class="text-3xl font-bold mb-4 text-brown-700 text-center">Otras Oraciones</h2>
+            <div class="space-y-6">
+                <button id="salve-btn" class="w-full px-6 py-3 bg-brown-600 text-white rounded-lg shadow-md hover:bg-brown-700 transition duration-300">1. Salve, Estrella del Mar</button>
+                <button id="magnificat-btn" class="w-full px-6 py-3 bg-brown-600 text-white rounded-lg shadow-md hover:bg-brown-700 transition duration-300">2. Magníficat</button>
+                <button id="coronilla-btn" class="w-full px-6 py-3 bg-brown-600 text-white rounded-lg shadow-md hover:bg-brown-700 transition duration-300">3. Coronilla de alabanzas a María</button>
+                
+                <h3 class="text-xl font-semibold mb-2 text-brown-700 mt-8">Oraciones Adicionales</h3>
+                <div class="p-4 rounded-lg shadow-md bg-gray-100">
+                    <h3 class="text-xl font-semibold mb-2 text-brown-700">Oración al Ángel de la Guarda</h3>
+                    <p class="text-sm">Ángel de la Guarda, dulce compañía, No me desampares ni de noche ni de día. No me dejes solo que me perdería. Hasta que me pongas en paz y alegría Con todos los santos, Jesús, José y María. Amén.</p>
+                </div>
+                <div class="p-4 rounded-lg shadow-md bg-gray-100">
+                    <h3 class="text-xl font-semibold mb-2 text-brown-700">Oración a San Miguel Arcángel</h3>
+                    <p class="text-sm">San Miguel Arcángel, defiéndenos en la batalla, Sé nuestro amparo contra la perversidad Y asechanzas del demonio. Reprímale Dios, pedimos suplicantes, Y tú, Príncipe de la milicia celestial, Arroja al infierno con el divino poder A Satanás y a los demás espíritus malignos Que andan dispersos por el mundo Para la perdición de las almas. Amén.</p>
+                </div>
+                <div class="p-4 rounded-lg shadow-md bg-gray-100">
+                    <h3 class="text-xl font-semibold mb-2 text-brown-700">Oración a San José</h3>
+                    <p class="text-sm">Querido San José, Esposo castísimo y purísimo de la Virgen María, Enséñame tu pureza y castidad, Tu obediencia confiada, Tu abandono filial, Y tu trabajo incansable. Protégeme como protegiste a tu familia, Y enséñame a ser justo y prudente como vos. Intercede ante tu Hijo por mí, Y ayúdame a vivir mi vocación como esposo y padre, Con la misma fidelidad con que vos serviste a Jesús y a María. Amén.</p>
+                </div>
+                <div class="p-4 rounded-lg shadow-md bg-gray-100">
+                    <h3 class="text-xl font-semibold mb-2 text-brown-700">Sub tuum praesidium</h3>
+                    <p class="text-sm">Bajo tu amparo nos acogemos, Santa Madre de Dios; No deseches las súplicas que te dirigimos en nuestras necesidades, Antes bien, líbranos siempre de todo peligro, ¡oh Virgen gloriosa y bendita! Contigo voy, Virgen Pura, Contigo voy, Virgen Pura, Y en tu poder voy confiado, Pues yendo en ti amparado, Mi alma volverá segura. Dulce Madre, no te alejes, Tu vista de mí no apartes. Ven conmigo a todas partes Y solo nunca me dejes. Y ya que me amas tanto Como verdadera Madre, Haz que me bendiga el Padre, El Hijo y el Espíritu Santo. Amén.</p>
+                </div>
+            </div>
+            <button id="back-btn" class="mt-8 px-6 py-3 bg-gray-200 text-gray-800 rounded-lg shadow-md hover:bg-gray-300 transition duration-300">
+                Volver
+            </button>
+        </section>
+
+        <section id="promises-container" class="hidden text-center">
+            <h2 class="text-3xl font-bold mb-4 text-brown-700">Promesas del Santo Rosario</h2>
+            <div class="text-left space-y-4">
+                <p>
+                    Cuenta la tradición que, en la segunda mitad del siglo XV, la Virgen María se le apareció al Beato dominico Alano de la Rupe, quien escribió el famoso libro “De Dignitate Psalterii” (De la dignidad del Salterio de María), en el cual relata cómo la Virgen pide a Santo Domingo de Guzmán que propague el rezo del Santo Rosario.
+                </p>
+                <p>
+                    Según el Beato Alano, estas son las promesas de Nuestra Señora para quienes rezan frecuentemente y con devoción la oración mariana:
+                </p>
+                <ol class="list-decimal list-inside space-y-2 text-sm md:text-base">
+                    <li>Aquellos que recen con enorme fe el Rosario recibirán gracias especiales.</li>
+                    <li>Prometo mi protección y las gracias más grandes a aquellos que recen el Rosario.</li>
+                    <li>El Rosario es un arma poderosa para no ir al infierno: destruye los vicios, disminuye los pecados y nos defiende de las herejías.</li>
+                    <li>Se otorgará la virtud y las buenas obras abundarán, se otorgará la piedad de Dios para las almas, rescatará a los corazones de la gente de su amor terrenal y vanidades, y los elevará en su deseo por las cosas eternas. Las mismas almas se santificarán por este medio.</li>
+                    <li>El alma que se encomiende a mí en el Rosario no perecerá.</li>
+                    <li>Quien rece el Rosario devotamente, y lleve los misterios como testimonio de vida no conocerá la desdicha. Dios no lo castigará en su justicia, no tendrá una muerte violenta, y si es justo, permanecerá en la gracia de Dios, y tendrá la recompensa de la vida eterna.</li>
+                    <li>Aquel que sea verdadero devoto del Rosario no perecerá sin los Sagrados Sacramentos.</li>
+                    <li>Aquellos que recen con mucha fe el Santo Rosario en vida y en la hora de su muerte encontrarán la luz de Dios y la plenitud de su gracia, en la hora de la muerte participarán en el paraíso por los méritos de los Santos.</li>
+                    <li>Libraré del purgatorio a quienes recen el Rosario devotamente.</li>
+                    <li>Los niños devotos al Rosario merecerán un alto grado de Gloria en el cielo.</li>
+                    <li>Obtendrán todo lo que me pidan mediante el Rosario.</li>
+                    <li>Aquellos que propaguen mi Rosario serán asistidos por mí en sus necesidades.</li>
+                    <li>Mi hijo me ha concedido que todo aquel que se encomiende a mí al rezar el Rosario tendrá como intercesores a toda la corte celestial en vida y a la hora de la muerte.</li>
+                    <li>Son mis niños aquellos que recitan el Rosario, y hermanos y hermanas de mi único hijo, Jesús Cristo.</li>
+                    <li>La devoción a mi Rosario es una gran señal de profecía.</li>
+                </ol>
+            </div>
+            <button id="promises-back-btn" class="mt-8 px-6 py-3 bg-gray-200 text-gray-800 rounded-lg shadow-md hover:bg-gray-300 transition duration-300">
+                Volver
+            </button>
+        </section>
+
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const startBtn = document.getElementById('start-btn');
+            const otherPrayersBtn = document.getElementById('other-prayers-btn');
+            const promisesBtn = document.getElementById('promises-btn');
+            const backBtn = document.getElementById('back-btn');
+            const promisesBackBtn = document.getElementById('promises-back-btn');
+
+            const welcomeScreen = document.getElementById('welcome-screen');
+            const rosaryContainer = document.getElementById('rosary-container');
+            const otherPrayersContainer = document.getElementById('other-prayers-container');
+            const promisesContainer = document.getElementById('promises-container');
+
+            const sectionTitle = document.getElementById('section-title');
+            const contentDisplay = document.getElementById('content-display');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const counterDisplay = document.getElementById('counter-display');
+            const prayerTypeSpan = document.getElementById('prayer-type');
+            const prayerCountSpan = document.getElementById('prayer-count');
+
+            let currentStep = 0;
+            let currentMysteryCount = 0;
+            let prayerCounts = {};
+            let rosarySteps = [];
+
+            const getDayOfWeek = () => new Date().getDay(); // 0 = Sunday, 1 = Monday, etc.
+
+            const mysteries = {
+                0: { name: 'Misterios Gloriosos (miércoles y domingo)', steps: [] },
+                1: { name: 'Misterios Gozosos (lunes y sábado)', steps: [] },
+                2: { name: 'Misterios Dolorosos (martes y viernes)', steps: [] },
+                3: { name: 'Misterios Gloriosos (miércoles y domingo)', steps: [] },
+                4: { name: 'Misterios Luminosos (jueves)', steps: [] },
+                5: { name: 'Misterios Dolorosos (martes y viernes)', steps: [] },
+                6: { name: 'Misterios Gozosos (lunes y sábado)', steps: [] }
+            };
+
+            const initialPrayers = [
+                { title: 'Persignación', content: '<p>Por la señal de la Santa Cruz,<br>De nuestros enemigos,<br>Líbranos Señor, Dios nuestro.</p>' },
+                { title: 'Signación', content: '<p>En el nombre del Padre,<br>Y del Hijo,<br>Y del Espíritu Santo. Amén.</p>' },
+                {
+                    title: 'Oración de amor, contrición y propósito',
+                    content: `
+                        <p>Señor mío Jesucristo,<br>Dios y hombre verdadero,<br>Creador, Padre y Redentor mío.<br>Te amo, Señor, y me duele profundamente<br>No haberte amado lo suficiente,<br>Ni haber amado a los demás como Tú nos mandaste.</p>
+                        <p>Confío en tu infinita misericordia,<br>Y me comprometo, con tu gracia,<br>A evitar el pecado —que es en esencia una falta de amor—<br>Y a acercarme prontamente a la Reconciliación sacramental<br>Cada vez que me separe de tu amistad.</p>
+                        <p>Enséñame a amar de verdad,<br>A crecer cada día en santidad,<br>Y a vivir unido a Ti,<br>Hasta descansar un día en tu eterna morada. Amén.</p>
+                    `
+                },
+                {
+                    title: 'Credo',
+                    content: `
+                        <p>Creo en Dios, Padre todopoderoso,<br>Creador del cielo y de la tierra.<br>Creo en Jesucristo, su único Hijo, nuestro Señor,<br>que fue concebido por obra y gracia del Espíritu Santo;<br>nació de Santa María Virgen,<br>padeció bajo el poder de Poncio Pilato,<br>fue crucificado, muerto y sepultado;<br>descendió a los infiernos;<br>al tercer día resucitó de entre los muertos;<br>subió a los cielos y está sentado<br>a la derecha de Dios, Padre todopoderoso.<br>Desde allí ha de venir a juzgar a vivos y muertos.<br>Creo en el Espíritu Santo,<br>la Santa Iglesia Católica,<br>la comunión de los santos,<br>el perdón de los pecados,<br>la resurrección de la carne<br>y la vida eterna. Amén.</p>
+                    `
+                },
+                {
+                    title: 'Ven, Creador Espíritu',
+                    content: `
+                        <p>Ven, Creador Espíritu,<br>visita las almas de tus fieles<br>y llena de la divina gracia<br>los corazones que Tú mismo creaste.<br>Tú eres nuestro Consolador,<br>don de Dios Altísimo,<br>fuente viva, fuego, caridad<br>y espiritual unción.<br>Tú derramas sobre nosotros los siete dones;<br>Tú, dedo de la mano de Dios;<br>Tú, promesa solemne del Padre<br>que pones en nuestros labios tu palabra.<br>Enciende con tu luz nuestros sentidos,<br>infunde tu amor en nuestros corazones<br>y, con tu perpetuo auxilio,<br>fortalece la debilidad de nuestro cuerpo.<br>Aleja de nosotros al enemigo,<br>danos pronto la paz,<br>sé tú mismo nuestro guía<br>y, puestos bajo tu dirección,<br>evitaremos todo lo nocivo.<br>Por Ti conozcamos al Padre<br>y también al Hijo;<br>y que en Ti, Espíritu de ambos,<br>creamos en todo tiempo.<br>Gloria a Dios Padre,<br>y al Hijo que resucitó de entre los muertos,<br>y al Espíritu Consolador,<br>por los siglos de los siglos. Amén.</p>
+                    `
+                }
+            ];
+
+            const finalPrayers = [
+                {
+                    title: 'Oración por el Papa y las almas del purgatorio',
+                    content: `
+                        <p><b>Se reza:</b></p>
+                        <ul class="list-disc list-inside">
+                            <li>1 Padrenuestro</li>
+                            <li>3 Avemarías</li>
+                            <li>1 Gloria</li>
+                        </ul>
+                    `
+                },
+                {
+                    title: 'Salve Regina',
+                    content: `
+                        <p>Dios te salve, Reina y Madre de misericordia,<br>Vida, dulzura y esperanza nuestra, Dios te salve.<br>A ti llamamos los desterrados hijos de Eva;<br>A ti suspiramos, gimiendo y llorando<br>En este valle de lágrimas.<br>Ea, pues, Señora abogada nuestra,<br>Vuelve a nosotros esos tus ojos misericordiosos;<br>Y después de este destierro,<br>Muéstranos a Jesús,<br>Fruto bendito de tu vientre.<br>¡Oh clemente, oh piadosa,<br>Oh dulce Virgen María!<br>Ruega por nosotros, Santa Madre de Dios,<br>Para que seamos dignos de alcanzar<br>Las promesas de nuestro Señor Jesucristo. Amén.</p>
+                    `
+                },
+                {
+                    title: 'Oración al Ángel de la Guarda',
+                    content: `
+                        <p>Ángel de la Guarda, dulce compañía,<br>No me desampares ni de noche ni de día.<br>No me dejes solo que me perdería.<br>Hasta que me pongas en paz y alegría<br>Con todos los santos, Jesús, José y María. Amén.</p>
+                    `
+                },
+                {
+                    title: 'Oración a San Miguel Arcángel',
+                    content: `
+                        <p>San Miguel Arcángel, defiéndenos en la batalla,<br>Sé nuestro amparo contra la perversidad<br>Y asechanzas del demonio.<br>Reprímale Dios, pedimos suplicantes,<br>Y tú, Príncipe de la milicia celestial,<br>Arroja al infierno con el divino poder<br>A Satanás y a los demás espíritus malignos<br>Que andan dispersos por el mundo<br>Para la perdición de las almas. Amén.</p>
+                    `
+                },
+                {
+                    title: 'Oración a San José',
+                    content: `
+                        <p>Querido San José,<br>Esposo castísimo y purísimo de la Virgen María,<br>Enséñame tu pureza y castidad,<br>Tu obediencia confiada,<br>Tu abandono filial,<br>Y tu trabajo incansable.<br>Protégeme como protegiste a tu familia,<br>Y enséñame a ser justo y prudente como vos.<br>Intercede ante tu Hijo por mí,<br>Y ayúdame a vivir mi vocación como esposo y padre,<br>Con la misma fidelidad con que vos serviste a Jesús y a María. Amén.</p>
+                    `
+                },
+                {
+                    title: 'Sub tuum praesidium',
+                    content: `
+                        <p>Bajo tu amparo nos acogemos, Santa Madre de Dios;<br>No deseches las súplicas que te dirigimos en nuestras necesidades,<br>Antes bien, líbranos siempre de todo peligro,<br>¡oh Virgen gloriosa y bendita!<br>Contigo voy, Virgen Pura,<br>Contigo voy, Virgen Pura,<br>Y en tu poder voy confiado,<br>Pues yendo en ti amparado,<br>Mi alma volverá segura.<br>Dulce Madre, no te alejes,<br>Tu vista de mí no apartes.<br>Ven conmigo a todas partes<br>Y solo nunca me dejes.<br>Y ya que me amas tanto<br>Como verdadera Madre,<br>Haz que me bendiga el Padre,<br>El Hijo y el Espíritu Santo. Amén.</p>
+                    `
+                }
+            ];
+            
+            // Misterios content from the user prompt
+            const joyfulMysteries = [
+                { title: '1. La Anunciación del Ángel a María', citation: 'Lc 1,26-38', reflection: 'En este misterio contemplamos el "sí" de María, que abre la puerta a la redención. María es modelo de fe activa y obediente a la voluntad de Dios.' },
+                { title: '2. La Visitación de María a su prima Isabel', citation: 'Lc 1,39-56', reflection: 'María lleva a Cristo en su seno y lo comunica con alegría. La caridad activa es fruto de una fe viva.' },
+                { title: '3. El Nacimiento de Jesús en Belén', citation: 'Lc 2,1-20', reflection: 'Dios se hace niño, humilde y pobre. Aquí se manifiesta la ternura divina que quiere nacer en cada corazón dispuesto.' },
+                { title: '4. La Presentación del Niño Jesús en el Templo', citation: 'Lc 2,22-38', reflection: 'Jesús, el Primogénito, es consagrado al Padre. María y José cumplen la Ley, revelando el valor de la obediencia en el plan salvífico.' },
+                { title: '5. El Niño Jesús perdido y hallado en el Templo', citation: 'Lc 2,41-52', reflection: 'Jesús muestra que su verdadera casa es el Templo, el lugar del Padre. Es una invitación a buscar siempre a Dios como lo esencial.' }
+            ];
+
+            const luminousMysteries = [
+                { title: '1. El Bautismo de Jesús en el Jordán', citation: 'Mt 3,13-17', reflection: 'El Padre revela a su Hijo y el Espíritu lo unge. El bautismo cristiano nos introduce en esta filiación divina.' },
+                { title: '2. Las Bodas de Caná', citation: 'Jn 2,1-12', reflection: 'María intercede, Jesús transforma el agua en vino. Es anticipo de la Eucaristía y del gozo de las bodas eternas.' },
+                { title: '3. El Anuncio del Reino de Dios y el llamado a la conversión', citation: 'Mc 1,15', reflection: 'Jesús proclama la llegada del Reino. Este misterio nos impulsa a vivir en fe, conversión y misión.' },
+                { title: '4. La Transfiguración del Señor', citation: 'Lc 9,28-36', reflection: 'Jesús revela su gloria. Anticipo de la Pascua, llama a la esperanza incluso en medio del sufrimiento.' },
+                { title: '5. La Institución de la Eucaristía', citation: 'Lc 22,14-20', reflection: 'Jesús se entrega en el pan y vino. Misterio de amor y presencia real: memorial del sacrificio pascual.' }
+            ];
+
+            const sorrowfulMysteries = [
+                { title: '1. La Agonía de Jesús en el Huerto', citation: 'Mt 26,36-46', reflection: 'Jesús carga con el peso del pecado del mundo. Nos enseña a unir nuestra voluntad a la del Padre.' },
+                { title: '2. La Flagelación del Señor', citation: 'Jn 19,1', reflection: 'En silencio, Cristo asume nuestro dolor. Su carne herida es redención para nuestras heridas.' },
+                { title: '3. La Coronación de espinas', citation: 'Mt 27,27-31', reflection: 'Cristo, Rey de amor humillado, vence la soberbia del mundo. Su corona es el signo del verdadero reinado.' },
+                { title: '4. Jesús carga con la cruz camino al Calvario', citation: 'Lc 23,26-32', reflection: 'En su carga, Jesús abraza nuestras cruces. Nos enseña a perseverar con paciencia y amor.' },
+                { title: '5. La Crucifixión y Muerte de Nuestro Señor', citation: 'Lc 23,33-46', reflection: 'En la cruz, Cristo nos entrega su vida y a su Madre. Su muerte es victoria sobre el pecado y camino a la vida eterna.' }
+            ];
+
+            const gloriousMysteries = [
+                { title: '1. La Resurrección del Señor', citation: 'Mt 28,1-10', reflection: 'Cristo vive. La muerte no tiene la última palabra. Este es el fundamento de nuestra fe y esperanza.' },
+                { title: '2. La Ascensión del Señor al cielo', citation: 'Hch 1,6-11', reflection: 'Jesús sube al cielo para interceder por nosotros. La meta de nuestra vida es participar de su gloria.' },
+                { title: '3. La Venida del Espíritu Santo en Pentecostés', citation: 'Hch 2,1-11', reflection: 'El Espíritu anima a la Iglesia y la envía al mundo. Nos hace partícipes de la misión de Cristo.' },
+                { title: '4. La Asunción de la Virgen María al cielo', citation: 'Ap 12,1 / Munificentissimus Deus, Pío XII', reflection: 'María participa anticipadamente de la resurrección. Es signo de esperanza segura para todos los redimidos.' },
+                { title: '5. La Coronación de María como Reina del cielo y de la tierra', citation: 'Ap 12,1 / Sal 45,10-15', reflection: 'María es glorificada por su fidelidad. Reina como Madre, intercesora y modelo de la Iglesia.' }
+            ];
+
+            mysteries[0].steps = gloriousMysteries;
+            mysteries[1].steps = joyfulMysteries;
+            mysteries[2].steps = sorrowfulMysteries;
+            mysteries[3].steps = gloriousMysteries;
+            mysteries[4].steps = luminousMysteries;
+            mysteries[5].steps = sorrowfulMysteries;
+            mysteries[6].steps = joyfulMysteries;
+            
+            // Jaculatorias
+            const jaculatorias = {
+                'Misterios Gozosos': 'María, Madre de gracia, Madre de misericordia, en la vida y en la muerte, ampáranos, Madre nuestra. Amén.',
+                'Misterios Luminosos': 'Oh Jesús, perdona nuestros pecados, líbranos del fuego del infierno, lleva al cielo a todas las almas, especialmente a las más necesitadas de tu divina misericordia. Amén.',
+                'Misterios Dolorosos': 'Por tu dolorosa pasión, ten misericordia de nosotros y del mundo entero. Amén.',
+                'Misterios Gloriosos': '¡Oh María, concebida sin pecado, ruega por nosotros que acudimos a ti! Amén.'
+            };
+
+            const generateRosarySteps = (mysterySteps, mysteryType) => {
+                const steps = [...initialPrayers];
+
+                mysterySteps.forEach((mystery, index) => {
+                    // Announce mystery
+                    steps.push({
+                        title: mystery.title,
+                        content: `
+                            <p class="text-gray-600 font-bold mb-2">${mystery.citation}</p>
+                            <p class="text-lg leading-relaxed mb-4">${mystery.reflection}</p>
+                            <p class="mt-4 text-sm text-gray-500">A continuación, reza...</p>
+                        `,
+                        type: 'announcement'
+                    });
+
+                    // Padrenuestro
+                    steps.push({
+                        title: 'Padrenuestro',
+                        content: `<p>Padre nuestro, que estás en el cielo...`,
+                        type: 'prayer-counter',
+                        countName: 'Padrenuestros',
+                        count: 1
+                    });
+
+                    // 10 Avemarías
+                    for (let i = 1; i <= 10; i++) {
+                        steps.push({
+                            title: `Avemaría #${i}`,
+                            content: `<p>Dios te salve, María, llena eres de gracia...`,
+                            type: 'prayer-counter',
+                            countName: 'Avemarías',
+                            count: i
+                        });
+                    }
+
+                    // Gloria
+                    steps.push({
+                        title: 'Gloria',
+                        content: `<p>Gloria al Padre, y al Hijo, y al Espíritu Santo...`,
+                        type: 'prayer-counter',
+                        countName: 'Glorias',
+                        count: 1
+                    });
+
+                    // Jaculatoria
+                    steps.push({
+                        title: 'Jaculatoria Final',
+                        content: `<p>${jaculatorias[mysteryType]}</p>`,
+                        type: 'jaculatoria'
+                    });
+                });
+                
+                steps.push(...finalPrayers);
+
+                steps.push({
+                    title: 'Fin del Rosario',
+                    content: `<p class="text-xl font-semibold">Hemos concluido la oración del Santo Rosario.</p>`,
+                    type: 'end'
+                });
+                
+                return steps;
+            };
+
+            const updateDisplay = () => {
+                const step = rosarySteps[currentStep];
+                sectionTitle.textContent = step.title;
+                contentDisplay.innerHTML = step.content;
+
+                if (step.type === 'prayer-counter') {
+                    counterDisplay.classList.remove('hidden');
+                    prayerTypeSpan.textContent = step.countName;
+                    prayerCountSpan.textContent = step.count;
+                } else {
+                    counterDisplay.classList.add('hidden');
+                }
+                
+                prevBtn.classList.toggle('hidden', currentStep === 0);
+                nextBtn.classList.toggle('hidden', step.type === 'end');
+            };
+
+            const startRosary = () => {
+                welcomeScreen.classList.add('hidden');
+                rosaryContainer.classList.remove('hidden');
+                otherPrayersContainer.classList.add('hidden');
+                promisesContainer.classList.add('hidden');
+                
+                const day = getDayOfWeek();
+                const currentMysteries = mysteries[day];
+                const mysteryType = currentMysteries.name.split(' (')[0];
+                rosarySteps = generateRosarySteps(currentMysteries.steps, mysteryType);
+                currentStep = 0;
+                updateDisplay();
+            };
+
+            const showOtherPrayers = () => {
+                welcomeScreen.classList.add('hidden');
+                rosaryContainer.classList.add('hidden');
+                promisesContainer.classList.add('hidden');
+                otherPrayersContainer.classList.remove('hidden');
+            };
+
+            const showPromises = () => {
+                welcomeScreen.classList.add('hidden');
+                rosaryContainer.classList.add('hidden');
+                otherPrayersContainer.classList.add('hidden');
+                promisesContainer.classList.remove('hidden');
+            };
+
+            startBtn.addEventListener('click', startRosary);
+            otherPrayersBtn.addEventListener('click', showOtherPrayers);
+            promisesBtn.addEventListener('click', showPromises);
+            
+            backBtn.addEventListener('click', () => {
+                otherPrayersContainer.classList.add('hidden');
+                welcomeScreen.classList.remove('hidden');
+            });
+
+            promisesBackBtn.addEventListener('click', () => {
+                promisesContainer.classList.add('hidden');
+                welcomeScreen.classList.remove('hidden');
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (currentStep < rosarySteps.length - 1) {
+                    currentStep++;
+                    updateDisplay();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentStep > 0) {
+                    currentStep--;
+                    updateDisplay();
+                }
+            });
+
+            // New logic for sub-prayers within the Other Prayers container
+            document.getElementById('salve-btn').addEventListener('click', () => {
+                const salveContent = `
+                    <h3 class="text-xl font-semibold mb-2 text-brown-700">Salve, Estrella del Mar</h3>
+                    <p>Salve, estrella del mar,<br>Madre fecunda de Dios,<br>y siempre Virgen,<br>feliz puerta del cielo.</p>
+                    <p>Recibiendo aquel “Ave”<br>de boca de Gabriel,<br>confírmanos en la paz,<br>cambiando el nombre de Eva.</p>
+                    <p>Desata las cadenas de los culpables,<br>da luz a los ciegos,<br>aparta de nosotros los males,<br>pide para nosotros todos los bienes.</p>
+                    <p>Muestra que eres madre,<br>reciba por ti nuestras súplicas<br>aquel que, nacido por nosotros,<br>quiso ser tuyo.</p>
+                    <p>Virgen sin igual,<br>mansedumbre sobre todas,<br>haz que, liberados de culpas,<br>seamos mansos y puros.</p>
+                    <p>Danos una vida limpia,<br>prepara un camino seguro,<br>para que viendo a Jesús<br>nos alegremos eternamente.</p>
+                    <p>Sea gloria a Dios Padre,<br>honor a Cristo excelsísimo,<br>y al Espíritu Santo:<br>a los tres, un solo honor. Amén.</p>
+                `;
+                showTemporaryContent(salveContent);
+            });
+
+            document.getElementById('magnificat-btn').addEventListener('click', () => {
+                const magnificatContent = `
+                    <h3 class="text-xl font-semibold mb-2 text-brown-700">Magníficat</h3>
+                    <p>Proclama mi alma la grandeza del Señor,<br>se alegra mi espíritu en Dios, mi salvador;<br>porque ha mirado la humillación de su esclava.</p>
+                    <p>Desde ahora me felicitarán todas las generaciones,<br>porque el Poderoso ha hecho obras grandes por mí:<br>su nombre es santo,<br>y su misericordia llega a sus fieles<br>de generación en generación.</p>
+                    <p>Él hace proezas con su brazo:<br>dispersa a los soberbios de corazón,<br>derriba del trono a los poderosos<br>y enaltece a los humildes,<br>a los hambrientos los colma de bienes<br>y a los ricos los despide vacíos.</p>
+                    <p>Auxilia a Israel, su siervo,<br>acordándose de la misericordia,<br>—como lo había prometido a nuestros padres—<br>en favor de Abraham y su descendencia por siempre.</p>
+                `;
+                showTemporaryContent(magnificatContent);
+            });
+
+            document.getElementById('coronilla-btn').addEventListener('click', () => {
+                const coronillaContent = `
+                    <h3 class="text-xl font-semibold mb-2 text-brown-700">Coronilla de alabanzas a María</h3>
+                    <p>V/. Dígnate aceptar mis alabanzas, Virgen Santísima.<br>R/. Dame fuerzas contra tus enemigos.</p>
+                    <p>Padrenuestro.<br>Dios te salve, María.</p>
+                    <p><b><u>Corona de santidad</u></b></p>
+                    <p>Bienaventurada eres, Virgen María, que llevaste en tu seno al Señor y Creador del mundo: engendraste al que te formó, permaneciendo siempre virgen.</p>
+                    <p>V/. Regocíjate, Virgen María.<br>R/. ¡Regocíjate mil veces!</p>
+                    <p>* Dios te salve, María.</p>
+                    <p>Oh Virgen Santa e Inmaculada, no sé con qué alabanzas honrarte dignamente, porque llevaste en tu seno al que no pueden contener los cielos.</p>
+                    <p>V/. Regocíjate, Virgen María.<br>R/. ¡Regocíjate mil veces!</p>
+                    <p>* Dios te salve, María.</p>
+                    <p>Muy hermosa eres, oh María, no hay en ti mancha alguna.</p>
+                    <p>V/. Regocíjate, Virgen María.<br>R/. ¡Regocíjate mil veces!</p>
+                    <p>* Dios te salve, María.</p>
+                    <p>Hay más virtudes en ti, Virgen María, que estrellas en el cielo.</p>
+                    <p>V/. Regocíjate, Virgen María.<br>R/. ¡Regocíjate mil veces!</p>
+                    <p>Gloria al Padre, y al Hijo...</p>
+                    <p><b><u>Corona de PODER</u></b></p>
+                    <p>Padrenuestro.<br>Dios te salve, María.</p>
+                    <p>Gloria a ti, Reina del universo, condúcenos contigo a la felicidad del Cielo.</p>
+                    <p>V/. Regocíjate, Virgen María.<br>R/. ¡Regocíjate mil veces!</p>
+                    <p>* Dios te salve, María.</p>
+                    <p>Gloria a ti, tesorera de las gracias del Señor: danos participar en los dones de Dios.</p>
+                    <p>V/. Regocíjate, Virgen María.<br>R/. ¡Regocíjate mil veces!</p>
+                    <p>* Dios te salve, María.</p>
+                    <p>Gloria a ti, mediadora entre Dios y los hombres:<br>haz que sea más íntimo nuestro encuentro con Cristo.</p>
+                    <p>V. Regocíjate, Virgen María.<br>R. ¡Regocíjate mil veces!</p>
+                    <p>* Dios te salve, María.</p>
+                    <p>Gloria a ti, Triunfadora sobre las fuerzas del mal:<br>sé nuestra piadosa guía por los senderos del Evangelio.</p>
+                    <p>V. Regocíjate, Virgen María.<br>R. ¡Regocíjate mil veces!</p>
+                    <p>Gloria al Padre, y al Hijo...</p>
+                    <p><b><u>Corona de BONDAD</u></b></p>
+                    <p>Padrenuestro.<br>*Dios te salve, María.</p>
+                    <p>Gloria a ti, Refugio de los pecadores: intercede por nosotros ante el Señor.</p>
+                    <p>V. Regocíjate, Virgen María.<br>R. ¡Regocíjate mil veces!</p>
+                    <p>* Dios te salve, María.</p>
+                    <p>Gloria a ti, Madre de los hombres: enséñanos a vivir como hijos de Dios.</p>
+                    <p>V. Regocíjate, Virgen María.<br>R. ¡Regocíjate mil veces!</p>
+                    <p>* Dios te salve, María.</p>
+                    <p>Gloria a ti, Alegría de los justos: condúcenos contigo a las alegrías del cielo.</p>
+                    <p>V. Regocíjate, Virgen María.<br>R. ¡Regocíjate mil veces!</p>
+                    <p>Dios te salve, María.</p>
+                    <p>Gloria a ti, prestísima ayuda nuestra en la vida y la muerte; llévanos contigo al reino de los cielos.</p>
+                    <p>V. Regocíjate, Virgen María.<br>R. ¡Regocíjate mil veces!</p>
+                    <p>Gloria al Padre, y al Hijo...</p>
+                    <p><b>OREMOS:</b></p>
+                    <p>Dios te salve, María, Hija de Dios Padre, Madre de Dios Hijo, Esposa del Espíritu Santo, Templo augusto de la Santísima Trinidad.<br>Dios te salve, María, Señora mía, mi tesoro, mi belleza, Reina de mi corazón, Madre, vida, dulzura y esperanza mía queridísima, –más aún– mi corazón y mi alma.<br>Soy todo tuyo, Oh Virgen benditísima, y todo lo mío es tuyo.<br>More en mí tu alma para engrandecer al Señor, more en mí tu espíritu para regocijarme en Dios.<br>Oh Virgen fidelísima, ponte como un sello sobre mi corazón, para que en ti y por ti permanezca fiel al Señor.<br>Concédeme, por tu bondad, la gracia de contarme en el número de los que amas, enseñas, diriges, nutres y proteges como a hijos.<br>Haz que despreciando por tu amor todos los consuelos terrenos, aspire continuamente a los bienes celestiales, hasta que por medio del Espíritu Santo, tu Esposo fidelísimo, y de ti, Esposa suya fidelísima, sea formado en mí Jesucristo, tu Hijo, para gloria del Padre celestial.</p>
+                    <p><b>Amén.</b></p>
+                `;
+                showTemporaryContent(coronillaContent);
+            });
+
+            // Function to handle temporary content display
+            const showTemporaryContent = (htmlContent) => {
+                const originalContent = otherPrayersContainer.innerHTML;
+                otherPrayersContainer.innerHTML = `
+                    <h2 class="text-3xl font-bold mb-4 text-brown-700 text-center">Otras Oraciones</h2>
+                    <div class="p-4 rounded-lg shadow-md bg-gray-100 mb-6">
+                        ${htmlContent}
+                    </div>
+                    <button id="temp-back-btn" class="mt-8 px-6 py-3 bg-gray-200 text-gray-800 rounded-lg shadow-md hover:bg-gray-300 transition duration-300">
+                        Volver a la lista
+                    </button>
+                `;
+                document.getElementById('temp-back-btn').addEventListener('click', () => {
+                    otherPrayersContainer.innerHTML = originalContent;
+                    setupOtherPrayersButtons();
+                });
+            };
+
+            // Helper to re-add listeners after content change
+            const setupOtherPrayersButtons = () => {
+                document.getElementById('salve-btn').addEventListener('click', () => {
+                    const salveContent = document.querySelector('#salve-template').innerHTML;
+                    showTemporaryContent(salveContent);
+                });
+                document.getElementById('magnificat-btn').addEventListener('click', () => {
+                    const magnificatContent = document.querySelector('#magnificat-template').innerHTML;
+                    showTemporaryContent(magnificatContent);
+                });
+                document.getElementById('coronilla-btn').addEventListener('click', () => {
+                    const coronillaContent = document.querySelector('#coronilla-template').innerHTML;
+                    showTemporaryContent(coronillaContent);
+                });
+            };
+
+            // Run initial setup for the buttons
+            setupOtherPrayersButtons();
+        });
+    </script>
+</body>
+</html>
